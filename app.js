@@ -14,8 +14,12 @@ var app = module.exports = Express.createServer();
 var io = require('socket.io').listen(app);
 
 app.configure(function () {
-    app.use(Express['static'](__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(Express.cookieParser());
+    app.use(Express.session( {secret: "mySecret"} ));
     app.use(app.router);
+    app.use(Express['static'](__dirname + '/public'));
 });
 
 io.sockets.on('connection', function(socket) {
@@ -31,6 +35,11 @@ io.sockets.on('connection', function(socket) {
     socket.on('whisper', function(message){
         io.sockets.in(message.reciever).emit('whisper', message);
     });
+});
+
+
+app.get('/', function(req, res, next) {
+    res.render('chat');
 });
 
 
