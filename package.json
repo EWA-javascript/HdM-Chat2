@@ -1,0 +1,17 @@
+{
+  "name" : "hdm-chat",
+  "description" : "Blah blah blah",
+  "version" : "1.0.0",
+  "author" : "EWA realtime web",
+  "directories" : { "lib" : "lib" },
+  "engines" : {
+    "node": ">= 0.6.0",
+    "npm" : ">= 1.1.*"
+  },
+  "dependencies": {
+    "express" : "= 2.5.10",
+    "connect" : "= 2.3.4",
+    "sanitizer" : ">= 0.0.15",
+    "faye-websocket" : "latest"
+  }
+}
