@@ -1,30 +1,51 @@
 $(function(){
-    var ws;
+    var socket;
     var username;
 
     console.log('START');
 
+    function isPrivateMessage(text) {
+      return text.split(' ')[0] === '/msg';
+    }
+
     function sendText() {
-      var message2send = username + ": " + $("#input").val();
-      ws.send(message2send);
+      var message2send = $("#input").val();
+      if(isPrivateMessage(message2send)){
+        var text = message2send.split(' ');
+        socket.emit('whisper', {sender: username, reciever: text[1], text: text[2]});
+      }
+      else{
+        socket.emit('broadcast', {sender: username, text: message2send});
+      }
       $("#input").val('');
     }
 
+    function appendToTextarea(text) {
+      var chatlog = $("#chatlog").val() + text + '\n';
+      $("#chatlog").val(chatlog);
+    }
+
+
     $("#connect").click(function(){
-        ws = new WebSocket("ws:localhost:8080");
+        socket = io.connect('http://localhost');
         username = $("#username").val();
 
-        ws.onopen = function(){
-          console.log("Connected as " + username);
-          /*TODO: Connect to the Server*/
-          ws.send("Say Hello to " + username);
-        };
+        socket.on('connect', function(data) {
+            socket.emit('join', username);
+        });
 
-        ws.onmessage = function(message){
-          console.log("Got message: " + message.data);
-          var chatlog = $("#chatlog").val() + message.data + '\n';
-          $("#chatlog").val(chatlog);
-        };
+        socket.on('new_user', function(username) {
+            appendToTextarea('Say Hello to ' + username);
+        });
+
+        socket.on('broadcast', function(message) {
+            appendToTextarea(message.sender + ': ' + message.text);
+        });
+
+        socket.on('whisper', function(message) {
+            appendToTextarea(message.sender + ' whispers: ' + message.text);
+        });
+
       });
 
     $("#send").click(function(){

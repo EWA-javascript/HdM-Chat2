@@ -4,7 +4,6 @@
  */
 
 var Express = require('express');
-var WebSocket = require('faye-websocket');
 
 var PORT = 8080;
 
@@ -12,37 +11,28 @@ var PORT = 8080;
  * set up the application
  */
 var app = module.exports = Express.createServer();
+var io = require('socket.io').listen(app);
 
 app.configure(function () {
     app.use(Express['static'](__dirname + '/public'));
     app.use(app.router);
-  });
+});
 
-var connections = [];
-
-function broadcast(event) {
-  connections.forEach(function (socket) {
-      console.log('sending ' + event.data);
-      socket.send(event.data);
+io.sockets.on('connection', function(socket) {
+    socket.on('join', function(username) {
+        socket.broadcast.emit('new_user', username);
+        socket.join(username);
     });
-}
 
-app.addListener('upgrade', function(request, socket, head) {
-    console.log('upgrade');
+    socket.on('broadcast', function(message){
+        io.sockets.emit('broadcast', message);
+    });
 
-    var ws = new WebSocket(request, socket, head);
-    connections.push(ws);
+    socket.on('whisper', function(message){
+        io.sockets.in(message.reciever).emit('whisper', message);
+    });
+});
 
-    ws.onmessage = function (event) {
-      broadcast(event);
-    };
-
-    ws.onclose = function (event) {
-      console.log('close', event.code, event.reason);
-      connections = connections.splice(connections.indexOf(ws));
-      ws = null;
-    };
-  });
 
 app.listen(PORT, function () {
     console.log('Server listening on port: http://localhost:' + PORT);
