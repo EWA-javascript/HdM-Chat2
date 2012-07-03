@@ -12,8 +12,11 @@ var PORT = 8080;
  * set up the application
  */
 var app = module.exports = Express.createServer();
+//import the socket.io module and start listening
 
 app.configure(function () {
+    //setup view engine
+    //setup bodyParser, cookieParser and sessionStore
     app.use(Express['static'](__dirname + '/public'));
     app.use(app.router);
   });
@@ -27,6 +30,7 @@ function broadcast(event) {
     });
 }
 
+//rewrite and use socket.io
 app.addListener('upgrade', function(request, socket, head) {
     console.log('upgrade');
 
@@ -43,6 +47,8 @@ app.addListener('upgrade', function(request, socket, head) {
       ws = null;
     };
   });
+
+//implement routes
 
 app.listen(PORT, function () {
     console.log('Server listening on port: http://localhost:' + PORT);

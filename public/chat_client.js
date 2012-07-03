@@ -11,6 +11,7 @@ $(function(){
     }
 
     $("#connect").click(function(){
+        //replace with socket.io
         ws = new WebSocket("ws:localhost:8080");
         username = $("#username").val();
 

@@ -11,7 +11,7 @@
   "dependencies": {
     "express" : "= 2.5.10",
     "connect" : "= 2.3.4",
-    "sanitizer" : ">= 0.0.15",
-    "faye-websocket" : "latest"
+    "socket.io" : "latest",
+    "jade" : "latest"
   }
 }
