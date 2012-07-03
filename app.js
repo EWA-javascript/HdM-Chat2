@@ -38,9 +38,6 @@ io.sockets.on('connection', function(socket) {
     rclient.llen("messages", function(err, history_len){
 	    console.log("history: " + history_len);
 	    rclient.lrange("messages", 0, history_len, function(err, rhistory){
-		    //socket.broadcast(rhistory);
-		    //console.log(rhistory);
-		    //history = JSON.parse(rhistory);
 		    rhistory.forEach(function(message, i){
 				io.sockets.emit('broadcast', JSON.parse(message));
 		    })

@@ -12,6 +12,8 @@
     "express" : "= 2.5.10",
     "connect" : "= 2.3.4",
     "socket.io" : "latest",
-    "jade" : "latest"
+    "jade" : "latest",
+    "redis":"latest",
+    "hiredis":"latest"
   }
 }
