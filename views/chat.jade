@@ -3,11 +3,6 @@ div#wrapper
   form
     table(border='0', align='center')
       tr
-        td
-          input(type='text')#username
-        td
-          input(type='button', value='Connect')#connect
-      tr
         td(colspan='2')
           textarea(cols='25', rows='15')#chatlog
       tr
@@ -15,3 +10,6 @@ div#wrapper
           input(type='text')#input
         td
           input(type='button', value='Send')#send
+
+script(src='chat_client.js')
+script(src='/socket.io/socket.io.js')

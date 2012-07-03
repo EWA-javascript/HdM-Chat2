@@ -1,9 +1,5 @@
 h1(align='center') HdM-Chat
 div#wrapper
-  form
-    table(border='0', align='center')
-      tr
-        td
-          input(type='text')#username
-        td
-          input(type='button', value='Connect')#connect
+  form(action='/auth', method='POST')
+    input(type='text', name='username')#username
+    input(type='submit', value='Connect')#connect
