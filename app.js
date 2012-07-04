@@ -6,6 +6,14 @@
 var Express = require('express');
 var parseCookie = require('./lib/utils').parseCookie;
 var sessionStore = new Express.session.MemoryStore();
+
+
+/*
+
+REDIS
+
+*/
+
 var redis = require("redis");
 var PORT = 8080;
 
@@ -14,6 +22,13 @@ var PORT = 8080;
  */
 var app = module.exports = Express.createServer();
 var io = require('socket.io').listen(app);
+
+
+/*
+
+REDIS
+
+*/
 var rclient = redis.createClient();
 
 
@@ -32,6 +47,14 @@ app.configure(function () {
 io.sockets.on('connection', function(socket) {
     var session = socket.handshake.session;
     socket.broadcast.emit('new_user', session.username);
+    
+    
+    
+/*
+
+REDIS
+
+*/
     
     var history = [];
     
